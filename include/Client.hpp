@@ -57,6 +57,10 @@
 #include "Settings.hpp"
 #include "Timestamp.hpp"
 
+#ifdef __linux
+#include<linux/tcp.h>
+#endif
+
 /* ------------------------------------------------------------------- */
 class Client {
 public:
@@ -71,6 +75,7 @@ public:
 
     // TCP specific version of above
     void RunTCP( void );
+    void OutTcpInfo(FILE *of,int sock);
 
     void InitiateServer();
 
@@ -87,6 +92,10 @@ protected:
     char* mBuf;
     Timestamp mEndTime;
     Timestamp lastPacketTime;
+    
+    // File name for Socket logging
+    char outFileName[100];
+    FILE *outFile;
 
 }; // end class Client
 

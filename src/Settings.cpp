@@ -231,6 +231,7 @@ void Settings_Initialize( thread_Settings *main ) {
     main->mTTL          = 1;             // -T,  link-local TTL
     //main->mDomain     = kMode_IPv4;    // -V,
     //main->mSuggestWin = false;         // -W,  Suggest the window size.
+    main->mLogFileName = "log";
 
 } // end Settings
 

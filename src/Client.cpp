@@ -72,6 +72,13 @@ Client::Client( thread_Settings *inSettings ) {
     // initialize buffer
     mBuf = new char[ mSettings->mBufLen ];
     pattern( mBuf, mSettings->mBufLen );
+    //strcpy(outFile,mSettings->mLogFileName);
+    pthread_t currentThread = pthread_self();
+    long tid = (long)currentThread;
+    sprintf(outFileName,"%s%ld",mSettings->mLogFileName,tid);
+    outFile = NULL;
+    outFile = fopen(outFileName,"w");
+
     if ( isFileInput( mSettings ) ) {
         if ( !isSTDIN( mSettings ) )
             Extractor_Initialize( mSettings->mFileName, mSettings->mBufLen, mSettings );
@@ -109,11 +116,43 @@ Client::~Client() {
         WARN_errno( rc == SOCKET_ERROR, "close" );
         mSettings->mSock = INVALID_SOCKET;
     }
+    if(outFile!=NULL)
+      fclose(outFile);
     DELETE_ARRAY( mBuf );
 } // end ~Client
 
 const double kSecs_to_usecs = 1e6; 
 const int    kBytes_to_Bits = 8; 
+
+#ifdef __linux
+void Client::OutTcpInfo(FILE *of,int sock){
+  if(of==NULL)
+		return;
+	struct tcp_info tcpInfo;
+	unsigned int len=-1;
+	getsockopt(sock,SOL_SOCKET, TCP_INFO, &tcpInfo, &len);
+	fprintf(of,"%d %u %u %u %u %u %u %u %u %u %u %u %u\n",
+			tcpInfo.tcpi_state,
+			tcpInfo.tcpi_last_data_sent,
+			tcpInfo.tcpi_last_data_recv,
+			tcpInfo.tcpi_snd_cwnd,
+			tcpInfo.tcpi_snd_ssthresh,
+			tcpInfo.tcpi_rcv_ssthresh,
+			tcpInfo.tcpi_rtt,
+			tcpInfo.tcpi_rttvar,
+			tcpInfo.tcpi_unacked,
+			tcpInfo.tcpi_sacked,
+			tcpInfo.tcpi_lost,
+			tcpInfo.tcpi_retrans,
+			tcpInfo.tcpi_fackets
+		   );
+	fflush(of);
+}
+#else
+void Client::OutTcpInfo(FILE *of,int sock){
+  return;
+}
+#endif
 
 void Client::RunTCP( void ) {
     unsigned long currLen = 0; 
@@ -156,7 +195,10 @@ void Client::RunTCP( void ) {
             canRead = true; 
 
         // perform write 
-        currLen = write( mSettings->mSock, mBuf, mSettings->mBufLen ); 
+        currLen = write( mSettings->mSock, mBuf, mSettings->mBufLen );
+#ifdef __linux
+        OutTcpInfo(outFile, mSettings->mSock);
+#endif
         if ( currLen < 0 ) {
             WARN_errno( currLen < 0, "write2" ); 
             break; 

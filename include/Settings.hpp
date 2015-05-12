@@ -174,6 +174,8 @@ typedef struct thread_Settings {
 #if defined( HAVE_WIN32_THREAD )
     HANDLE mHandle;
 #endif
+    // Filename for output of TCP socket logging data
+    char* mLogFileName;
 } thread_Settings;
 
 /*
