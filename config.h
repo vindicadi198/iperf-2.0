@@ -19,7 +19,7 @@
 
 /* Define to 1 if you have the declaration of `IPV6_ADD_MEMBERSHIP', and to 0
    if you don't. */
-#define HAVE_DECL_IPV6_ADD_MEMBERSHIP 0
+#define HAVE_DECL_IPV6_ADD_MEMBERSHIP 1
 
 /* Define to 1 if you have the declaration of `IPV6_MULTICAST_HOPS', and to 0
    if you don't. */
@@ -51,10 +51,10 @@
 #define HAVE_IPV6 1
 
 /* Define to enable IPv6 multicast support */
-/* #undef HAVE_IPV6_MULTICAST */
+#define HAVE_IPV6_MULTICAST 1
 
 /* Define to 1 if you have the <libintl.h> header file. */
-/* #undef HAVE_LIBINTL_H */
+#define HAVE_LIBINTL_H 1
 
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 /* #undef HAVE_LIBNSL */
@@ -91,7 +91,7 @@
 #define HAVE_PTHREAD 1
 
 /* Define to 1 if you have the `pthread_cancel' function. */
-#define HAVE_PTHREAD_CANCEL 1
+/* #undef HAVE_PTHREAD_CANCEL */
 
 /* */
 #define HAVE_QUAD_SUPPORT 1

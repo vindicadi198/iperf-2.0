@@ -142,7 +142,11 @@ SPECIAL_OSF1_EXTERN_C_START
     #include <netdb.h>
 SPECIAL_OSF1_EXTERN_C_STOP
     #include <netinet/in.h>
-    #include <netinet/tcp.h>
+    #ifndef __linux
+        #include <netinet/tcp.h>
+    #else
+        #include <linux/tcp.h>
+    #endif
 
 SPECIAL_OSF1_EXTERN_C_START
     #include <arpa/inet.h>   /* netinet/in.h must be before this on SunOS */

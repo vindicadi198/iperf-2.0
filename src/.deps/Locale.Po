@@ -1,4 +1,7 @@
-Locale.o: Locale.c ../include/version.h ../config.h
+Locale.o: Locale.c /usr/include/stdc-predef.h ../include/version.h \
+ ../config.h
+
+/usr/include/stdc-predef.h:
 
 ../include/version.h:
 
